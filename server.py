@@ -1,8 +1,7 @@
 import threading
 import socket
 import time
-import Bots
-from _thread import *
+
 
 host = '127.0.0.1'
 port = 1235
@@ -12,10 +11,10 @@ server.bind((host, port))
 
 server.listen()
 
-clients = []
-aliases = []
+clients = []     # list of clients
+aliases = []     # list of clients names
 
-
+# function for broadcasting message to clients except the sender
 def broadcast(message, sender):
     for client in clients:
         if client == sender:
@@ -23,27 +22,28 @@ def broadcast(message, sender):
         else:
          client.send(message)
 
-""""
-def multi_threaded_client(connection):
-        verb = Bots.generate_verb()
-        message = f'Host: Do you guys want to {verb} \n'
-        connection.send(message.encode('utf-8'))
-"""
 
-
-
-
-
+# function for handling clients communication
 def handel_client(client):
 
     while True:
         try:
-             #multi_threaded_client(client)
-             message = client.recv(1024)
-             broadcast(message, client)
-             print(message)
 
-        except:
+             message = client.recv(1024)
+             receivedmsg = message.decode().split(": ")
+
+             if receivedmsg[1] == "QUITE":                 #The host is shutting down the chatroom
+                 time.sleep(1)
+                 print("Disconnecting clients")
+                 for i in clients:
+                     i.close()                             #Clossing every clients socket
+                 exit()
+             else:
+                 time.sleep(0.5)                           # if message is not shutdown, wait and forward all messages to all clients
+                 broadcast(message, client)
+
+
+        except:                                           # drop client
             index = clients.index(client)
             clients.remove(client)
             client.close()
@@ -54,7 +54,7 @@ def handel_client(client):
 
 
 
-
+# connects incoming clients to the chat room
 def receive():
     while True:
         print("server is running and listning...")
@@ -65,7 +65,6 @@ def receive():
         aliases.append(alias)
         clients.append(client)
         print(f'The alias of this client is {alias}')
-        #start_new_thread(multi_threaded_client, (client, ))
         broadcast(f'{alias} has connected to the chat room'. encode(), client)
         client.send('you are now connected!'.encode('utf-8'))
         thread = threading.Thread(target=handel_client, args=(client,))

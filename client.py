@@ -1,16 +1,19 @@
 import threading
 import socket
-import sys
 import Bots
-
-IP_address = str(sys.argv[1])
-Port = int(sys.argv[2])
-name = str(sys.argv[3])
+import sys
 
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.connect((IP_address, Port))
+
+IP_address = str(sys.argv[1])  #provided ip address to connect to
+Port = int(sys.argv[2])        # provided port number
+name = str(sys.argv[3])        # clients name
+
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # socket object
+
+client.connect((IP_address, Port))                          # connect client to server
 
 
 
@@ -29,11 +32,11 @@ def client_receive():
           client.close()
           break
 
-def host():
+def host(message):
     while True:
         client_receive()
-        verb = Bots.generate_verb()
-        message = f'{name}:Do you want to {verb} \n'
+        #verb = Bots.generate_verb()
+        #message = f'{name}:Do you want to {verb} \n'
         client.send(message.encode('utf-8'))
         print(message)
         data = client_receive()
@@ -59,13 +62,19 @@ def client_send():
  n = 4
  while n > 0:
 
-  if name == "Me":
-      host()
-      print(n)
-      n = n - 1
+  if name == "Host":
+    while True:
+     message = input("put you suggestion here")
+     client.send(message.encode('utf-8'))
+     print(message)
+     data = client_receive()
+     if not data:
+         continue
+
   elif name == "Alice":
      alice()
-     n = n - 1
+
+  n = n - 1
 
 
 
