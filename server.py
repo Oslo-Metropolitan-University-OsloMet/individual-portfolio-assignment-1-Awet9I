@@ -1,10 +1,11 @@
 import threading
 import socket
 import time
+import sys
 
 
 host = '127.0.0.1'
-port = 1235
+port = int(sys.argv[1])
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind((host, port))
@@ -17,26 +18,27 @@ aliases = []     # list of clients names
 # function for broadcasting message to clients except the sender
 def broadcast(message, sender):
     for client in clients:
-        if client == sender:
+        if client is sender:
             continue
         else:
-         client.send(message)
+            client.send(message)
+
+
 
 
 # function for handling clients communication
 def handel_client(client):
-
     while True:
         try:
-
              message = client.recv(1024)
              receivedmsg = message.decode().split(": ")
 
-             if receivedmsg[1] == "QUITE":                 #The host is shutting down the chatroom
-                 time.sleep(1)
+             if (receivedmsg[1] == "QUIT"):                 #The host is shutting down the chatroom
+                 #time.sleep(1)
                  print("Disconnecting clients")
                  for i in clients:
-                     i.close()                             #Clossing every clients socket
+                     i.close()                           #Clossing every clients socket
+                 print("server is running and listning...")
                  exit()
              else:
                  time.sleep(0.5)                           # if message is not shutdown, wait and forward all messages to all clients
