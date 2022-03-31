@@ -36,6 +36,8 @@ def sifan(verb):
     else: #if provided verb is not in the list of action verbs then respond with this
          return "{}: i don't know what that is, but it's fine with me\n".format(name)
 
+
+
 """
 chat response generator for noah bot, that takes in a verb and returns a string formated with the verb
 """
@@ -46,6 +48,8 @@ def noah(verb):
            return random.choice(responses)
     else: #if provided verb is not in the list of action verbs then respond with this
         return "{}: No, what the hell is that?\n".format(name)
+
+
 
 
 """
