@@ -3,11 +3,11 @@ individual-portfolio-assignment-1-Awet9I created by GitHub
 Classroom
 
 
-1. Start by running the server.py in a terminal window with the port as the argument.
+1. Run server.py in a terminal window with the port as the argument.
 
-2. The server will then go in listen-mode and wait for connections and let us know if somebody connects.
+2. The server will then  listening and wait for connections and print a message if somebody connects.
 
-3. Open up at least one terminal for a bot, or as many as you see fit. Keep in mind that there are only 3 bots to choose from: Sifan, Noah and Miki
+3. Open terminal for a bot. Run the cleint.py by providing ip address, port number and name as arguments. You can only choose one of these names as a bot: Sifan, Noah and Miki
 
 4. One must also open one terminal for the host-client
 Start client.py in the new terminals with 3 arguments: IP-address, port and name. Any bot name other than the given ones will result the client running as a host
